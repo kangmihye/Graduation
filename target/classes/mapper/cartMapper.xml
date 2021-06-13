@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cap.test.dao.CartMapper">
+
+<!--비회원 가입-->
+<insert id="pwInsert" parameterType="user">
+	insert into
+		user_cart(
+			user_no
+			,user_pw
+		)values(
+			user_cart_seq.nextVal
+			,#{user_pw}
+		)
+</insert>
+
+<!--원래 있던 비번으로 로그인--><!--비번 중복 검사-->
+<select id="userLogin" parameterType="string" resultType="user">
+	select
+		user_no
+		,user_pw
+	from
+		user_cart
+	where
+		user_pw=#{user_pw}
+</select>
+
+
+
+
+<!--장바구니 링크 담기-->
+<insert id="cartInsert" parameterType="cart">
+	insert into
+		cart(
+			cart_no
+			,user_no
+			,product_link
+			,product_nm
+			,product_image
+		) values(
+			cart_seq.nextVal
+			,#{user_no}
+			,#{product_link}
+			,#{product_nm}
+			,#{product_image}
+		)
+</insert>
+
+<!--장바구니 리스트 불러오기-->
+<select id="cartSelectAll" parameterType="int" resultType="hashmap">
+	select
+		c.cart_no as cart_no
+		,to_char(u.user_indate,'yyyy-MM-dd') as user_indate
+		,c.user_no as user_no
+		,c.product_link as product_link
+		,c.product_nm as product_nm
+		,c.product_image as product_image
+	from 
+		cart c,user_cart u
+	where
+		c.user_no=u.user_no
+	and	
+		u.user_no=#{user_no}
+	order by
+		cart_no desc
+</select>
+
+<!--장바구니 삭제-->
+<delete id="cartDelete" parameterType="cart">
+	delete from
+		cart
+	where
+		cart_no=#{cart_no}
+	and
+		user_no=#{user_no}
+</delete>
+
+<!--회원정보 리스트 보기(전체조회)-->
+<!-- <select id="userSelectAll" resultType="user"> -->
+<!-- 	select -->
+<!-- 		user_no -->
+<!-- 		,user_id -->
+<!-- 		,user_pw -->
+<!-- 		,user_nm -->
+<!-- 		,to_char(user_indate,'yyyy-MM-dd') as user_indate -->
+<!-- 	from -->
+<!-- 		user_prac_tb -->
+<!-- 	order by -->
+<!-- 		user_no desc -->
+<!-- </select> -->
+
+<!--삭제-->
+<!-- <delete id="userDelete" parameterType="int"> -->
+<!-- 	delete from -->
+<!-- 		user_prac_tb -->
+<!-- 	where -->
+<!-- 		user_no=#{user_no} -->
+<!-- </delete>  -->
+
+<!--상세조회-->
+<!-- <select id="userDetail" parameterType="int" resultType="user"> -->
+<!-- 	select -->
+<!-- 		user_no -->
+<!-- 		,user_id -->
+<!-- 		,user_pw -->
+<!-- 		,user_nm -->
+<!-- 		,to_char(user_indate,'yyyy-MM-dd') as user_indate -->
+<!-- 	from -->
+<!-- 		user_prac_tb -->
+<!-- 	where -->
+<!-- 		user_no=#{user_no} -->
+<!-- </select> -->
+
+<!--수정-->
+<!-- <update id="userUpdate" parameterType="user"> -->
+<!-- 	update -->
+<!-- 		user_prac_tb -->
+<!-- 	set -->
+<!-- 		user_pw=#{user_pw} -->
+<!-- 		,user_nm=#{user_nm} -->
+<!-- 	where -->
+<!-- 		user_no=#{user_no} -->
+<!-- </update> -->
+
+
+
+
+<!--프로필 조회-->
+<!-- <select id="profileSelect" parameterType="string" resultType="profile"> -->
+<!-- 	select -->
+<!-- 		profile_no -->
+<!-- 		,user_id -->
+<!-- 		,profile_image -->
+<!-- 		,profile_pr -->
+<!-- 	from -->
+<!-- 		profile_prac_tb -->
+<!-- 	where -->
+<!-- 		user_id=#{user_id} -->
+<!-- </select> -->
+
+ <!--프로필 등록-->
+<!-- <insert id="profileInsert" parameterType="profile"> -->
+<!-- 	insert into -->
+<!-- 		profile_prac_tb( -->
+<!-- 			profile_no -->
+<!-- 			,user_id -->
+<!-- 			,profile_image -->
+<!-- 			,profile_pr -->
+<!-- 		)values( -->
+<!-- 			profile_prac_seq.nextval -->
+<!-- 			,#{user_id} -->
+<!-- 			,#{profile_image} -->
+<!-- 			,#{profile_pr} -->
+<!-- 		) -->
+<!-- </insert> -->
+</mapper>
